@@ -1,0 +1,121 @@
+org: lucianayc
+service: auth-microservice
+
+provider:
+  name: aws
+  runtime: python3.12
+  timeout: 30
+  memorySize: 256
+  region: us-east-1
+  stage: dev
+  iam:
+    role: arn:aws:iam::131515946730:role/LabRole
+  environment:
+    CLIENTE_TABLE: ClienteTable
+    TRABAJADOR_TABLE: TrabajadorTable
+    TOKEN_TABLE: TokenTable
+    JWT_SECRET: "mi_super_secreto"
+    JWT_EXPIRE_SECONDS: 86400
+
+functions:
+  registerClient:
+    handler: src/register/register_client.handler
+    events:
+      - http:
+          path: register/client
+          method: post
+          cors: true
+
+  registerWorker:
+    handler: src/register/register_worker.handler
+    events:
+      - http:
+          path: register/worker
+          method: post
+          cors: true
+
+  login:
+    handler: src/auth/login.handler
+    events:
+      - http:
+          path: auth/login
+          method: post
+          cors: true
+
+  validateToken:
+    handler: src/validation/validate_token.handler
+    type: request
+    identitySource: method.request.header.Authorization
+    resultTtlInSeconds: 0
+    enableSimpleResponses: true
+
+  protectedExample:
+    handler: src/protected/example.handler
+    events:
+      - http:
+          path: protected/example
+          method: get
+          cors: true
+          authorizer:
+            name: validateToken
+            type: request
+
+resources:
+  Resources:
+
+    ClienteTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ClienteTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: cliente_id
+            AttributeType: S
+          - AttributeName: correo
+            AttributeType: S
+        KeySchema:
+          - AttributeName: cliente_id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: correo-index
+            KeySchema:
+              - AttributeName: correo
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    TrabajadorTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: TrabajadorTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: trabajador_id
+            AttributeType: S
+          - AttributeName: correo
+            AttributeType: S
+        KeySchema:
+          - AttributeName: trabajador_id
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: correo-index
+            KeySchema:
+              - AttributeName: correo
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+
+    TokenTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: TokenTable
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          - AttributeName: user_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: user_id
+            KeyType: HASH
+
+plugins:
+  - serverless-python-requirements
