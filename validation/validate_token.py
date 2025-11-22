@@ -26,7 +26,7 @@ def lambda_handler(event, context):
             "body": "Invalid token payload"
         }
 
-    # 2. Validar contra DynamoDB
+    # 2. Validar token contra DynamoDB
     resp = token_table().get_item(Key={"user_id": user_id})
     item = resp.get("Item")
 
@@ -36,7 +36,7 @@ def lambda_handler(event, context):
             "body": "Token revoked or not registered"
         }
 
-    # ÉXITO
+    # 3. Si todo OK, retornar info del usuario para reglas de negocio
     return {
         "statusCode": 200,
         "body": json.dumps({

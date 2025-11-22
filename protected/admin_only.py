@@ -13,20 +13,20 @@ def invoke_token_validator(token):
         Payload=payload
     )
 
-    result = json.loads(response["Payload"].read())
-    return result
+    return json.loads(response["Payload"].read())
 
 
 def lambda_handler(event, context):
     headers = event.get("headers", {}) or {}
     auth = headers.get("Authorization") or headers.get("authorization")
 
-    if not auth or not auth.startswith("Bearer "):
-        return error("Missing or invalid Authorization header", 401)
+    if not auth:
+        return error("Missing Authorization header", 401)
 
-    token = auth.split(" ")[1]
+    # 🔓 Se permite token sin Bearer
+    token = auth.replace("Bearer ", "").strip()
 
-    # 🔒 Validar token llamando al otro Lambda
+    # 🔒 Validar token llamando al lambda de seguridad
     validation = invoke_token_validator(token)
 
     if validation.get("statusCode") != 200:
@@ -34,7 +34,7 @@ def lambda_handler(event, context):
 
     user = json.loads(validation["body"])
 
-    # Validar reglas de negocio
+    # 🧠 Validar reglas de negocio
     if user.get("type") != "worker":
         return error("only workers allowed", 403)
 
