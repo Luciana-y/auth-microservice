@@ -1,6 +1,5 @@
 import json
 from utils import decode_token, token_table
-from datetime import datetime
 
 def lambda_handler(event, context):
     token = event.get("token")

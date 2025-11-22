@@ -5,7 +5,7 @@ from utils import ok, error
 def invoke_token_validator(token):
     lambda_client = boto3.client("lambda")
 
-    payload = json.dumps({ "token": token })
+    payload = json.dumps({"token": token})
 
     response = lambda_client.invoke(
         FunctionName="auth-microservice-dev-validateToken",
@@ -26,7 +26,7 @@ def lambda_handler(event, context):
 
     token = auth.split(" ")[1]
 
-    # 🔒 Validar token llamando a otro Lambda
+    # 🔒 Validar token llamando al otro Lambda
     validation = invoke_token_validator(token)
 
     if validation.get("statusCode") != 200:
