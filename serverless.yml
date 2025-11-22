@@ -57,11 +57,6 @@ functions:
           path: protected/example
           method: get
           cors: true
-          authorizer:
-            name: validateToken
-            type: request
-            identitySource: method.request.header.Authorization
-
 
 resources:
   Resources:
