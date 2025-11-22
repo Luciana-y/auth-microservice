@@ -49,13 +49,9 @@ functions:
 
   validateToken:
     handler: validation/validate_token.lambda_handler
-    type: request
-    identitySource: method.request.header.Authorization
-    resultTtlInSeconds: 0
-    enableSimpleResponses: true
 
   protectedExample:
-    handler: protected/example.lambda_handler
+    handler: protected/admin_only.lambda_handler
     events:
       - http:
           path: protected/example
@@ -64,6 +60,8 @@ functions:
           authorizer:
             name: validateToken
             type: request
+            identitySource: method.request.header.Authorization
+
 
 resources:
   Resources:
