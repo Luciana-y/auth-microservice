@@ -1,7 +1,7 @@
 # register_worker.py
 import json
 import uuid
-from src.utils import (
+from utils import (
     ok, error,
     find_trabajador_by_email, trabajador_table,
     hash_password

@@ -1,7 +1,7 @@
 # login.py
 import json
 from datetime import datetime, timezone
-from src.utils import (
+from utils import (
     ok, error,
     find_trabajador_by_email, find_cliente_by_email,
     token_table,

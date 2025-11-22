@@ -1,5 +1,5 @@
 # validate_token.py
-from src.utils import decode_token, token_table
+from utils import decode_token, token_table
 
 def lambda_handler(event, context):
     headers = event.get("headers", {}) or {}

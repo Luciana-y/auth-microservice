@@ -1,6 +1,11 @@
 org: lucianayc
 service: auth-microservice
 
+custom:
+  pythonRequirements:
+    # Esto le dice al plugin que use el comando 'python3' de tu sistema
+    pythonBin: python3
+
 provider:
   name: aws
   runtime: python3.12
@@ -19,7 +24,7 @@ provider:
 
 functions:
   registerClient:
-    handler: src/register/register_client.handler
+    handler: register/register_client.lambda_handler
     events:
       - http:
           path: register/client
@@ -27,7 +32,7 @@ functions:
           cors: true
 
   registerWorker:
-    handler: src/register/register_worker.handler
+    handler: register/register_worker.lambda_handler
     events:
       - http:
           path: register/worker
@@ -35,7 +40,7 @@ functions:
           cors: true
 
   login:
-    handler: src/auth/login.handler
+    handler: auth/login.lambda_handler
     events:
       - http:
           path: auth/login
@@ -43,14 +48,14 @@ functions:
           cors: true
 
   validateToken:
-    handler: src/validation/validate_token.handler
+    handler: validation/validate_token.lambda_handler
     type: request
     identitySource: method.request.header.Authorization
     resultTtlInSeconds: 0
     enableSimpleResponses: true
 
   protectedExample:
-    handler: src/protected/example.handler
+    handler: protected/example.lambda_handler
     events:
       - http:
           path: protected/example

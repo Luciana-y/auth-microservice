@@ -2,7 +2,7 @@
 import json
 import uuid
 from datetime import datetime, timezone
-from src.utils import (
+from utils import (
     ok, error,
     find_cliente_by_email, cliente_table,
     hash_password

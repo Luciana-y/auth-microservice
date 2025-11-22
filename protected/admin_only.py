@@ -1,5 +1,5 @@
 # admin_only.py
-from src.utils import ok, error
+from utils import ok, error
 
 def lambda_handler(event, context):
     auth = event.get("requestContext", {}).get("authorizer", {})
