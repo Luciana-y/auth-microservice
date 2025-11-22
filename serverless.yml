@@ -16,9 +16,9 @@ provider:
   iam:
     role: arn:aws:iam::131515946730:role/LabRole
   environment:
-    CLIENTE_TABLE: ClienteTable
-    TRABAJADOR_TABLE: TrabajadorTable
-    TOKEN_TABLE: TokenTable
+    DYNAMO_CLIENTE_TABLE: ClienteTable
+    DYNAMO_TRABAJADOR_TABLE: TrabajadorTable
+    DYNAMO_TOKEN_TABLE: TokenTable
     JWT_SECRET: "mi_super_secreto"
     JWT_EXPIRE_SECONDS: 86400
 
