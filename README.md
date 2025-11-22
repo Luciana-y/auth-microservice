@@ -26,6 +26,9 @@
     ```
 
 4. Ya puedes deployarlo:
-```bash
-sls deploy
-```
+    ```bash
+    sls deploy
+    ```
+
+## Carpeta protected
+En esa carpeta hay un endpoint de prueba para el flujo del servicio, puedes obviarlo modificando el yml
